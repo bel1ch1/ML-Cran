@@ -1,10 +1,11 @@
 from queue import Queue
 
 import cv2
+import time
 import numpy as np
 
 
-
+# Constantes
 a_dict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_5X5_1000)
 a_param = cv2.aruco.DetectorParameters()
 marker_size = 35 / 1000 # Перевод в метры
@@ -18,7 +19,7 @@ class batch_queue():
     def __init__(self, batch_size):
         self.queue = Queue()
         for _ in range(batch_size):
-            self.queue.put(0)
+            self.queue.put(0)  # Заполнение нулями определенного пространства
 
     # Добавление нового элемента
     def put_in_queue(self, coords):
@@ -33,7 +34,30 @@ class batch_queue():
         self.data = self.queue.queue
         return self.data
 
-    def speedometer(self):
+
+def markers_data(frame):
+    """  Функция возвращает данные о позиции маркера с временной меткой  """
+    # Перевод кадра в серый
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    # Получение углов маркера на кадре
+    corner, _, _ = cv2.aruco.detectMarkers(gray, dictionary=a_dict, parameters=a_param)
+    if corner:
+        # Получение вектора отклонений маркера в реальном мире
+        _, tvec, _ = cv2.aruco.estimatePoseSingleMarkers(
+            corner, markerLength=marker_size, cameraMatrix=MATX, distCoeffs=DIST_COEF
+        )
+
+
+        if tvec:
+            # Временная метка
+            time_stamp = time.time()
+            # Отклонения от центра кадра по X и Y
+            dX = int(tvec[0][0][0])
+            dY = int(tvec[0][0][1])
+            return [time_stamp, dX, dY]
+
+
+def speedometer(self):
         '''Входные данные должны иметь вид:
         [
         [time1, time2, time3 ...],
@@ -64,22 +88,44 @@ class batch_queue():
         return [[speed],[direction]]
 
 
+# Инициализация камеры
 cap = cv2.VideoCapture(0)
-que = batch_queue()
+cap.set(cv2.CAP_PROP_FPS, 120)
+
+# Инициализация очереди
+que = batch_queue(10)
+
+
 
 while True:
-    ret, frame = cap.read()
+    ret, frame = cap.read()   # кадр
 
-    if ret:
+    # Проверка работы камеры
+    if not ret:
+        break
+
+    else:
+        # Перевод кадра в серый
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        # Получение углов маркера на кадре
         corner, _, _ = cv2.aruco.detectMarkers(gray, dictionary=a_dict, parameters=a_param)
-
         if corner:
+            # Получение вектора отклонений маркера в реальном мире
             _, tvec, _ = cv2.aruco.estimatePoseSingleMarkers(
                 corner, markerLength=marker_size, cameraMatrix=MATX, distCoeffs=DIST_COEF
             )
 
-            if tvec:
-                # Дистанции
-                dX = int(tvec[0][0][0])
-                dY = int(tvec[0][0][1])
+            if tvec is not None:
+                # Временная метка
+                time_stamp = time.time()
+                # Отклонения от центра кадра по X и Y
+                dX = int(tvec[0][0][0]*1000)
+                dY = int(tvec[0][0][1]*1000)
+                que.put_in_queue([time_stamp, dX, dY])
+                que.pull_it_out()
+                data = que.get_data()
+
+
+# Корректное завершение программы (отключение потока камеры)
+cap.release()
+cv2.destroyAllWindows()
