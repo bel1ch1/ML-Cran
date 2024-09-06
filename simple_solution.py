@@ -88,12 +88,18 @@ def speedometer(self):
         return [[speed],[direction]]
 
 
+# Иметация модели
+class Fake_model():
+    def __init__(self, data):
+        self.data = data # just plug
+
+
 # Инициализация камеры
 cap = cv2.VideoCapture(0)
 cap.set(cv2.CAP_PROP_FPS, 120)
 
 # Инициализация очереди
-que = batch_queue(10)
+que = batch_queue(100)         # указать длину одного пакета
 
 
 
@@ -124,6 +130,10 @@ while True:
                 que.put_in_queue([time_stamp, dX, dY])
                 que.pull_it_out()
                 data = que.get_data()
+
+            # Применение модели МО для выявления тряски
+            if data[0] != 0:
+                out = Fake_model(data)
 
 
 # Корректное завершение программы (отключение потока камеры)
