@@ -20,10 +20,13 @@ Description
 - mark - метка
 ---
 
-dataset 1000 rows
-batch = 20 rows
-Training data = 35 batchs
-Testing data = 15 batchs
+Датасет не является настоящим. Был сгенерирован с использованием стороннего софта
+
+- dataset 1000 rows
+- batch = 20 rows
+- Training data = 35 batchs
+- Testing data = 15 batchs
 
 10к epoch
+
 ![alt text](image.png)
