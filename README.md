@@ -17,4 +17,13 @@ Description
 - timestamp - временная метка
 - x - отклонение от центра кадра
 - y - отклонение от центра кадра
+- mark - метка
 ---
+
+dataset 1000 rows
+batch = 20 rows
+Training data = 35 batchs
+Testing data = 15 batchs
+
+10к epoch
+![alt text](image.png)
