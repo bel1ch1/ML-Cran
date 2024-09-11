@@ -3,13 +3,13 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Создание DataFrame из ваших данных
-data = pd.read_csv('cargo_trajectory_data.csv')
+data = pd.read_csv('CSV/my_trajectory.csv')
 
 df = pd.DataFrame(data)
 
 # График траектории (изменение по X и Y)
 plt.figure(figsize=(10, 6))
-plt.plot(df['deviation_x'], df['deviation_y'], marker='o', linestyle='-', color='b')
+plt.plot(df['dx'], df['dy'], marker='o', linestyle='-', color='b')
 plt.xlabel('Изменение по X')
 plt.ylabel('Изменение по Y')
 plt.title('График траектории объекта')
@@ -18,8 +18,8 @@ plt.show()
 
 # График изменений X и Y по времени
 plt.figure(figsize=(12, 6))
-plt.plot(df['timestamp'], df['deviation_x'], label='Изменение по X', color='r', marker='o')
-plt.plot(df['timestamp'], df['deviation_y'], label='Изменение по Y', color='g', marker='o')
+plt.plot(df['timestamp'], df['dx'], label='Изменение по X', color='r', marker='o')
+plt.plot(df['timestamp'], df['dy'], label='Изменение по Y', color='g', marker='o')
 plt.xlabel('Время')
 plt.ylabel('Изменение')
 plt.title('График изменений по X и Y по времени')

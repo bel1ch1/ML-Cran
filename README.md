@@ -29,4 +29,4 @@ Description
 
 10к epoch
 
-![alt text](image.png)
+![alt text](/REadme_files/image.png)

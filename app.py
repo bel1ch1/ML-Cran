@@ -3,12 +3,14 @@ from queue import Queue
 import cv2
 import time
 import numpy as np
+import pandas as pd
 
 
 # Constantes
 a_dict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_5X5_1000)
 a_param = cv2.aruco.DetectorParameters()
 marker_size = 35 / 1000 # Перевод в метры
+
 DIST_COEF = np.array([[-0.22657406,  0.97367389, -0.00574975, -0.00995885, -1.71856769]])
 MATX = np.array([[609.06873396, 0.0, 299.48555699],[0.0, 613.58229373, 238.86448876],[0.0, 0.0, 1.0]])
 
@@ -100,7 +102,7 @@ cap = cv2.VideoCapture(0)
 cap.set(cv2.CAP_PROP_FPS, 120)
 
 # Инициализация очереди
-que = batch_queue(100)         # указать длину одного пакета
+que = batch_queue(20)         # указать длину одного пакета
 
 
 
@@ -131,11 +133,12 @@ while True:
                 que.put_in_queue([time_stamp, dX, dY])
                 que.pull_it_out()
                 data = que.get_data()
-
-            # Применение модели МО для выявления тряски
-            if data[0] != 0:
-                out = Fake_model(data)
-
+                if data[0] != 0:
+                    # Преобразование в DataFrame
+                    new_df = pd.DataFrame([data], columns=['timestamp', 'dx', 'dy'])
+                    print(new_df)
+                    # # Запись новых данных в CSV в режиме добавления
+                    # new_df.to_csv('my_trajectory.csv', mode='a', header=False, index=False)
 
 # Корректное завершение программы (отключение потока камеры)
 cap.release()
