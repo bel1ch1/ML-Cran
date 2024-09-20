@@ -30,3 +30,11 @@ Description
 10к epoch
 
 ![alt text](/REadme_files/image.png)
+
+---
+
+### RNN (LSTM) with correct data emitation
+
+1k epoch, 1k rows
+
+![altuha](/REadme_files/{6E63C1F1-A3A9-4A6E-9645-97A63AA5480B}.png)
