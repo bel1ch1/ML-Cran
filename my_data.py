@@ -3,10 +3,12 @@ import numpy as np
 from keras.models import Sequential
 from keras.layers import LSTM, Dense
 import matplotlib.pyplot as plt
-
+import os
+os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
+os.environ["CUDA_VISIBLE_DEVICE"] = ""
 
 # Загрузка данных
-data = pd.read_csv('cargo_trajectory_data.csv')
+data = pd.read_csv('CSV/better_dset.csv')
 
 data_array = data.values
 
@@ -16,12 +18,12 @@ train_data = data_array[:train_size]
 test_data = data_array[train_size:]
 
 # Create sub-arrays from the training and testing sets
-seq_length = 20
+seq_length = 100
 X_train = []
 y_train = []
 for i in range(len(train_data) - seq_length):
     seq = train_data[i:i+seq_length]
-    label = train_data[i+seq_length-1, 3]  # assuming "swinging" is the 4th column
+    label = train_data[i+seq_length-1, 4]  # assuming "swinging" is the 4th column
     X_train.append(seq)
     y_train.append(label)
 
@@ -29,19 +31,19 @@ X_test = []
 y_test = []
 for i in range(len(test_data) - seq_length):
     seq = test_data[i:i+seq_length]
-    label = test_data[i+seq_length-1, 3]  # assuming "swinging" is the 4th column
+    label = test_data[i+seq_length-1, 4]  # assuming "swinging" is the 4th column
     X_test.append(seq)
     y_test.append(label)
 
-X_train = np.array(X_train).reshape(-1, seq_length, 4)
+X_train = np.array(X_train).reshape(-1, seq_length, 5)
 y_train = np.array(y_train)
-X_test = np.array(X_test).reshape(-1, seq_length, 4)
+X_test = np.array(X_test).reshape(-1, seq_length, 5)
 y_test = np.array(y_test)
 
 
 # Модель
 model = Sequential()
-model.add(LSTM(units=50, return_sequences=True, input_shape=(seq_length, 4)))
+model.add(LSTM(units=50, return_sequences=True, input_shape=(seq_length, 5)))
 model.add(LSTM(units=50))
 model.add(Dense(1, activation='sigmoid'))
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
@@ -51,7 +53,7 @@ model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy']
 print(X_train.shape)
 print(y_train.shape)
 
-history = model.fit(X_train, y_train, epochs=10000, batch_size=None, validation_data=(X_test, y_test))
+history = model.fit(X_train, y_train, epochs=500, batch_size=None, validation_data=(X_test, y_test))
 
 predictions = model.predict(np.array(X_test))
 
