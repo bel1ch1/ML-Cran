@@ -38,3 +38,19 @@ Description
 1k epoch, 1k rows
 
 ![altuha](/REadme_files/{6E63C1F1-A3A9-4A6E-9645-97A63AA5480B}.png)
+
+
+### RNN with right data
+
+10 epoch, 1k rows
+
+![alt text]({4F164360-373E-483D-9B22-F7939AE27A50}.png)
+
+100 epoch, 1k rows
+
+![alt text]({FBF2B88B-6F7A-475E-90A4-EFF122FDF7C6}.png)
+
+
+1k epoch, 1k rows -overfitting
+
+![alt text]({40F7C2D0-8FA7-4C08-9796-7ED3AEFFFD4C}.png)
