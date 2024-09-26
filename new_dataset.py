@@ -67,7 +67,7 @@ def speedometer(self):
 
 # Инициализация камеры
 cap = cv2.VideoCapture(0)
-#cap.set(cv2.CAP_PROP_FPS, 120)
+cap.set(cv2.CAP_PROP_FPS, 120)
 
 # Инициализация очереди
 que = batch_queue(20)               # указать длину одного объекта
@@ -86,7 +86,7 @@ while True:
         break
 
     else:
-        #cv2.imshow("frames", frame)   # Кратинка
+        cv2.imshow("frames", frame)   # Кратинка
 
 #################  GENERATOR  #####################################################################
         # Перевод кадра в серый
@@ -116,20 +116,19 @@ while True:
                 spd = np.abs(distance / dt)           # Вычисление скорости
 
 #################  BAGGING  #######################################################################
-                dot_arr.append(X)                     # Добавление признака X
-                dot_arr.append(Y)                     # Добавление признака Y
-                dot_arr.append(int(spd))              # Добавление признака spd
-                que.put_in_queue(dot_arr)           # Добавление массива в очередь (в объект)
-                que.pull_it_out()                     # Удаление самого старого объекта очереди
-                data = que.get_data()                 # Получение полной очереди (весь объект)
-                print(data)
-#1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20
-                df = pd.DataFrame([data], columns=[
-                    '1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20'
-                    ])
-                print(df.head())
+                dot_arr.append(X)                       # Добавление признака X
+                dot_arr.append(Y)                       # Добавление признака Y
+                dot_arr.append(int(spd))                # Добавление признака spd
+                que.put_in_queue(dot_arr)               # Добавление массива в очередь (в объект)
+                que.pull_it_out()                       # Удаление самого старого объекта очереди
+                data = list(que.get_data())                   # Получение полной очереди (весь объект)
+                data = [data, 0]
+
+                df = pd.DataFrame(data=[data], columns=['coords', 'lables'])
+
+                print(df)
                 # Запись новых данных в CSV в режиме добавления
-                df.to_csv('right_data.csv', mode='a', header=False, index=False)
+                df.to_csv('CSV/right_data.csv', mode='a', header=False, index=False)
 
 
 
