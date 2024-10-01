@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 import ast
+import numpy as np
 
 # Функция для чтения и обработки данных из CSV
 def read_data(csv_file):
@@ -36,7 +37,7 @@ def plot_sequences(df, batch_size=10):
         plt.show()
 
 # Чтение данных
-csv_file = "CSV/right_data.csv"  # Замените на путь к вашему файлу
+csv_file = "datas\CSV\right_data.csv"  # Замените на путь к вашему файлу
 df = read_data(csv_file)
 
 # Построение графиков по 10 последовательностей за раз
