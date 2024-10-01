@@ -22,7 +22,7 @@ class batch_queue():
     def __init__(self, batch_size):
         self.queue = Queue()
         for _ in range(batch_size):
-            self.queue.put(0)  # Заполнение нулями определенного пространства
+            self.queue.put(None)  # Заполнение нулями определенного пространства
 
     # Добавление нового элемента
     def put_in_queue(self, coords):
@@ -70,7 +70,7 @@ cap = cv2.VideoCapture(0)
 cap.set(cv2.CAP_PROP_FPS, 120)
 
 # Инициализация очереди
-que = batch_queue(20)               # указать длину одного объекта
+que = batch_queue(100)               # указать длину одного объекта
 previous_dot_X = 0                  # Создание начальной точки положения для X
 previous_dot_Y = 0                  # Создание начальной точки положения для Y
 first_time_dot = time.time()        # Создание начальной точки времени
@@ -123,12 +123,11 @@ while True:
                 que.pull_it_out()                       # Удаление самого старого объекта очереди
                 data = list(que.get_data())                   # Получение полной очереди (весь объект)
                 data = [data, 0]
-
                 df = pd.DataFrame(data=[data], columns=['coords', 'lables'])
-
-                print(df)
-                # Запись новых данных в CSV в режиме добавления
-                df.to_csv('CSV/right_data.csv', mode='a', header=False, index=False)
+                if data[0][0] is not None:
+                    print(df)
+                    # Запись новых данных в CSV в режиме добавления
+                    df.to_csv('datas/CSV/right_data.csv', mode='a', header=False, index=False)
 
 
 
