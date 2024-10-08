@@ -90,10 +90,12 @@ def get_direction(angle_radians):
 
 # Инициализация камеры
 cap = cv2.VideoCapture(0)
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 300)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 300)
 cap.set(cv2.CAP_PROP_FPS, 120)
 
 # Инициализация очереди
-que = batch_queue(20)               # указать длину одного объекта
+que = batch_queue(80)               # указать длину одного объекта
 previous_dot_X = 0                  # Создание начальной точки положения для X
 previous_dot_Y = 0                  # Создание начальной точки положения для Y
 first_time_dot = time.time()        # Создание начальной точки времени
@@ -105,15 +107,13 @@ while True:
     if not ret:
         break
 
-    if cv2.waitKey(1) == ord("q"):
-        break
+    # if cv2.waitKey(1) == ord("q"):
+    #     break
 
     else:
-        cv2.imshow("frames", frame)   # Кратинка
-
-
         # Перевод кадра в серый
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        #cv2.imshow("frames", gray)   # Кратинка
         # Получение углов маркера на кадре
         corner, _, _ = cv2.aruco.detectMarkers(gray, dictionary=a_dict, parameters=a_param)
         if corner:
@@ -149,7 +149,7 @@ while True:
                 que.pull_it_out()                       # Удаление самого старого объекта очереди
                 data = list(que.get_data())             # Получение полной очереди (весь объект) list
                 data = [data]                           # Упаковка в массив
-
+                #print(data[0][0])
                 df = pd.DataFrame(data=[data], columns=['coords'])
 
                 if data[0][0] is not None:
