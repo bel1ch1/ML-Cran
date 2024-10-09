@@ -54,3 +54,13 @@ Description
 1k epoch, 1k rows -overfitting
 
 ![alt text]({40F7C2D0-8FA7-4C08-9796-7ED3AEFFFD4C}.png)
+
+
+---
+
+Считать раскаченность как: 1
+![alt text]({00F8FBC1-0E7F-4FBB-8A47-B085BE246369}.png)
+
+
+Счттать отсутствие раскаченности как: 0
+![alt text]({40E94C7A-A8DB-4A17-8B47-BFD1A0968906}.png)

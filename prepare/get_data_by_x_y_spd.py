@@ -2,7 +2,6 @@ import cv2                       # Поулчение данных
 import time                      # Ввявление скорости
 import numpy as np               # Преобразовния
 import pandas as pd              # Упаковка
-import matplotlib.pyplot as plt  # Рисование
 from queue import Queue          # Формирование последовательностей
 
 
