@@ -109,7 +109,7 @@ while True:
                 data = data.reshape(1, data.shape[0], data.shape[1])  # (1, 80, 3)
 
                 # Предсказание модели
-                predictions = model.predict(data)
+                predictions = model.predict(data,verbose=0)
                 if predictions > 0.5:
                     print("DA")
                 else:
