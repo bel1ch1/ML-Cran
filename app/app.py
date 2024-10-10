@@ -14,7 +14,7 @@ DIST_COEF = np.array([[-0.22657406,  0.97367389, -0.00574975, -0.00995885, -1.71
 MATX = np.array([[609.06873396, 0.0, 299.48555699],[0.0, 613.58229373, 238.86448876],[0.0, 0.0, 1.0]])
 
 # Загрузка модели
-model = load_model('rnn_lstm_model.h5')
+model = load_model('rnn_lstm_model_2.h5')
 
 # --- Реализация специальной очереди для данных ---
 class batch_queue():
@@ -110,7 +110,8 @@ while True:
 
                 # Предсказание модели
                 predictions = model.predict(data,verbose=0)
-                if predictions > 0.5:
+                p = predictions
+                if predictions[0][0] > 0.5:
                     print("DA")
                 else:
                     print("NET")
