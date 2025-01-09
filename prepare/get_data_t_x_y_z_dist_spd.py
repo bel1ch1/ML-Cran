@@ -11,7 +11,7 @@ a_dict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_5X5_1000)
 a_param = cv2.aruco.DetectorParameters()
 a_param.useAruco3Detection = True
 a_param.adaptiveThreshConstant = 0
-marker_size = 35 / 1000 # Перевод в метры
+marker_size = 142 / 1000 # Перевод в метры
 DIST_COEF = np.array([[-0.22657406,  0.97367389, -0.00574975, -0.00995885, -1.71856769]])
 MATX = np.array([[609.06873396, 0.0, 299.48555699],[0.0, 613.58229373, 238.86448876],[0.0, 0.0, 1.0]])
 
@@ -73,15 +73,15 @@ while True:
                         speed = 0
 
                     # Сохраняем данные
-                    data = data.append({
-                        "Time": time.time(),
-                        "X": x,
-                        "Y": y,
-                        "Z": z,
-                        "Distance": distance,
-                        "Speed": speed
-                    }, ignore_index=True)
-
+                    new_row = pd.DataFrame({
+                    "Time": [time.time()],
+                    "X": [x],
+                    "Y": [y],
+                    "Z": [z],
+                    "Distance": [distance],
+                    "Speed": [speed]
+                })
+                    data = pd.concat([data, new_row], ignore_index=True)
                     # Обновляем предыдущую позицию
                     prev_position = current_position
 
