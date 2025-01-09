@@ -24,7 +24,7 @@ cap.set(cv2.CAP_PROP_FPS, 120)
 
 
 # Создание DataFrame для хранения данных
-data = pd.DataFrame(columns=["Time", "X", "Y", "Distance", "Speed"])
+data = pd.DataFrame(columns=["Time", "X", "Y", "Z", "Distance", "Speed"])
 
 
 # Инициализация переменных для вычислений
@@ -81,13 +81,15 @@ while True:
                     "Distance": [distance],
                     "Speed": [speed]
                 })
+                    new_row = new_row.dropna(axis=1, how="all")
                     data = pd.concat([data, new_row], ignore_index=True)
+                    data.to_csv("T_X_Y_Z_Dist_Speed.csv", mode="a", header=False, index=False)
                     # Обновляем предыдущую позицию
                     prev_position = current_position
 
 
                 # Запись данных в CSV файл
-        data.to_csv("T_X_Y_Z_Dist_Speed.csv", index=False)
+        #data.to_csv("T_X_Y_Z_Dist_Speed.csv", index=False)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
@@ -95,4 +97,4 @@ while True:
 # Корректное завершение программы (отключение потока камеры)
 cap.release()
 cv2.destroyAllWindows()
-data.to_csv("T_X_Y_Z_Dist_Speed.csv", index=False)
+#data.to_csv("T_X_Y_Z_Dist_Speed.csv", index=False)
