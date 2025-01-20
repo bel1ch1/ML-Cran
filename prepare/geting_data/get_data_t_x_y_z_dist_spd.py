@@ -49,7 +49,7 @@ while True:
         #cv2.imshow("frames", gray)   # Кратинка
         # Получение углов маркера на кадре
         corner, ids, _ = cv2.aruco.detectMarkers(gray, dictionary=a_dict, parameters=a_param)
-        
+
         if ids is not None:
             for i in range(len(ids)):
                 # Проверяем, является ли текущий маркер целевым
@@ -84,17 +84,11 @@ while True:
                     new_row = new_row.dropna(axis=1, how="all")
                     data = pd.concat([data, new_row], ignore_index=True)
                     data.to_csv("T_X_Y_Z_Dist_Speed.csv", mode="a", header=False, index=False)
+
                     # Обновляем предыдущую позицию
                     prev_position = current_position
 
 
-                # Запись данных в CSV файл
-        #data.to_csv("T_X_Y_Z_Dist_Speed.csv", index=False)
-
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-
 # Корректное завершение программы (отключение потока камеры)
 cap.release()
 cv2.destroyAllWindows()
-#data.to_csv("T_X_Y_Z_Dist_Speed.csv", index=False)
